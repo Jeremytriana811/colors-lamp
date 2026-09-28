@@ -34,7 +34,7 @@ README.md
 1. Use a Linux server with Apache, PHP (with MySQLi), and MySQL installed.
 2. Create a MySQL database named `COP4331` with two tables:
    - `Users` with columns `ID`, `firstName`, `lastName`, `Login`, `Password`
-   - `Colors` (TODO: confirm the table and column names from AddColor.php)
+     - `Colors` with columns `Name` and `UserID` (plus an auto-generated ID)
 3. Copy `api/config.example.php` to `api/config.php` and enter your own
    database host, user, password, and database name. `config.php` is listed in
    `.gitignore` so credentials are never committed.
@@ -74,10 +74,7 @@ Every endpoint accepts a POST request with a JSON body.
   the database collation.
 
 ## AI usage
-TODO: describe what you actually did. Example: "I used Claude to help with Git
-commands, moving the database credentials out of the PHP files, and structuring
-this README. I copied the lab files from my server and tested the changes
-myself."
+   I used Claude to help with Git commands, moving the database credentials out of the PHP files, and structuring this README. I copied the lab files from my server and made the changes myself.
 
 ## License
 MIT. See `LICENSE.md`.
