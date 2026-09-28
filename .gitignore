@@ -1,0 +1,6 @@
+api/config.php
+.env
+.env.*
+.DS_Store
+Thumbs.db
+.vscode/
