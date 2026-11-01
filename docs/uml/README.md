@@ -1,18 +1,39 @@
-# COLORS UML diagrams
 
-These diagrams describe the COLORS LAMP application in `Jeremytriana811/colors-lamp`.
+# COLORS UML Diagrams
 
-- `usecase.puml` / `usecase.png`: actions available to an existing-account user.
-- `activity.puml` / `activity.png`: high-level login, search, add, and logout workflow.
-- `class.puml` / `class.png`: conceptual module/data model of this procedural application.
+These diagrams represent my COLORS LAMP web application for COP 4331C. The application allows users to log in, add colors, search their saved colors, and log out.
 
-## Notes about the implementation
+## 1. Use Case Diagram
 
-- The browser code is `public/js/code.js` and calls `/LAMPAPI/Login.php`, `/LAMPAPI/AddColor.php`, and `/LAMPAPI/SearchColors.php`.
-- The PHP source files live in `api/` in the GitHub repository; deployment copies them into `LAMPAPI/`.
-- Each PHP endpoint imports a private `api/config.php` and instantiates its own MySQLi connection. `config.example.php` is the public configuration template. No `database.php` shared connection helper exists in this repository.
-- `Users` and `Colors` are database tables. The `User`/`Color` link is intended logical ownership, not a confirmed foreign key.
-- UML "class" boxes for PHP/JS files are stereotyped conceptual modules; the code does not define corresponding OOP classes.
-- This is a simplified normal-operation model. It does not show every error condition; e.g., searching with no matches can cause the current JS callback to fail while reading `results.length`.
+Shows the main actions a user can perform in the COLORS application.
 
-To render editable `.puml` files, use PlantUML (e.g. its online editor or a local PlantUML JAR). The PNG files are previews; the class PNG was laid out separately, so rerendering its source may produce a slightly different arrangement while retaining the same semantics.
+![Use Case Diagram](usecase.png)
+
+[View PlantUML Source](usecase.puml)
+
+## 2. Activity Diagram
+
+Shows the workflow from logging in to adding or searching colors and logging out.
+
+![Activity Diagram](activity.png)
+
+[View PlantUML Source](activity.puml)
+
+## 3. Class Diagram
+
+Shows the JavaScript controller, PHP endpoints, database connections, and User and Color entities. The application uses procedural modules rather than actual object-oriented classes.
+
+![Class Diagram](class.png)
+
+[View PlantUML Source](class.puml)
+
+## Implementation Notes
+
+- Frontend: HTML, CSS, and JavaScript.
+- Backend: PHP endpoints for login, adding colors, and searching colors.
+- Database: MySQL Users and Colors tables.
+- Database configuration: api/config.php.
+- No user registration functionality.
+
+The diagrams represent the main functionality of the implemented COLORS application.
+  
