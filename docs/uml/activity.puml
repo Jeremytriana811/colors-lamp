@@ -1,0 +1,46 @@
+@startuml
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam activityBackgroundColor #F4F4F4
+skinparam activityBorderColor #7A7A7A
+skinparam ArrowColor #454545
+title COLORS — Activity Diagram
+start
+:Open index.html;
+:Enter username and password;
+:POST credentials to Login.php;
+:Look up account in Users table;
+while (Invalid credentials?) is (yes)
+  :Display login error;
+  :Re-enter credentials;
+  :POST credentials to Login.php;
+  :Look up account in Users table;
+endwhile (no)
+:Save user information in cookie;
+:Open color.html;
+repeat
+  if (Search saved colors?) then (yes)
+    :Enter search text;
+    :POST search and userId to SearchColors.php;
+    :Query matching records in Colors;
+    :Display results if returned;
+  else (no)
+    if (Add a color?) then (yes)
+      :Enter color name;
+      :POST color and userId to AddColor.php;
+      :Insert new record into Colors;
+      :Display add response;
+    else (no)
+      :Remain on color page;
+    endif
+  endif
+repeat while (Keep using COLORS?) is (yes) not (no / Log Out)
+:Clear login cookie and user state;
+:Return to index.html;
+stop
+legend bottom
+  High-level intended flow; server and browser errors are omitted.
+  An existing lab account is required (no registration page).
+endlegend
+@enduml

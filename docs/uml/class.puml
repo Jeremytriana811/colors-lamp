@@ -1,0 +1,87 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam classAttributeIconSize 0
+skinparam classBackgroundColor #EFF6FF
+skinparam classBorderColor #4779CA
+skinparam ArrowColor #41546E
+hide empty members
+title COLORS — Class Diagram\nConceptual modules and stored data (procedural PHP / JavaScript)
+class "Browser controller\npublic/js/code.js" as Browser <<module>> {
+  userId : Number
+  firstName : String
+  lastName : String
+  +doLogin()
+  +saveCookie()
+  +readCookie()
+  +doLogout()
+  +addColor()
+  +searchColor()
+}
+class "Login.php" as Login <<endpoint>> {
+  +getRequestInfo()
+  +sendResultInfoAsJson(obj)
+  +returnWithError(err)
+  +returnWithInfo(firstName, lastName, id)
+}
+class "AddColor.php" as Add <<endpoint>> {
+  +getRequestInfo()
+  +sendResultInfoAsJson(obj)
+  +returnWithError(err)
+}
+class "SearchColors.php" as Search <<endpoint>> {
+  +getRequestInfo()
+  +sendResultInfoAsJson(obj)
+  +returnWithError(err)
+  +returnWithInfo(searchResults)
+}
+class "config.php" as Config <<configuration>> {
+  dbHost
+  dbUser
+  dbPass
+  dbName
+}
+class "MySQLi connection" as DB <<library>> {
+  +prepare(sql)
+  +close()
+}
+class User <<entity>> {
+  ID : int {PK}
+  firstName : string
+  lastName : string
+  Login : string
+  Password : string
+}
+class Color <<entity>> {
+  ID : int {PK}
+  Name : string
+  UserID : int
+}
+Browser ..> Login : POST login, password
+Browser ..> Add : POST color, userId
+Browser ..> Search : POST search, userId
+Login ..> Config : require_once
+Add ..> Config : require_once
+Search ..> Config : require_once
+Login ..> DB : new mysqli(...)
+Add ..> DB : new mysqli(...)
+Search ..> DB : new mysqli(...)
+Login ..> User : SELECT
+Add ..> Color : INSERT
+Search ..> Color : SELECT
+User "1" -- "0..*" Color : intended owner
+note bottom of User
+  Association is conceptual.
+  No foreign key is verified in the repository.
+end note
+note bottom of Config
+  Private api/config.php is gitignored;
+  api/config.example.php is the template.
+end note
+legend bottom
+  <<module>>, <<endpoint>>, <<configuration>> = procedural files, not real classes.
+  <<entity>> = database records, not ORM classes.
+endlegend
+@enduml
