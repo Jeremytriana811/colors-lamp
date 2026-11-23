@@ -1,13 +1,27 @@
-
-name: COLORS Lint
+name: COLORS Lint and Tests
 
 on:
   push:
   pull_request:
 
 jobs:
-  lint:
+  lint-and-test:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root_test_password
+          MYSQL_DATABASE: COP4331
+          MYSQL_USER: colors_test
+          MYSQL_PASSWORD: colors_test_password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot_test_password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -17,7 +31,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install linting tools
+      - name: Install linting and testing tools
         run: npm install
 
       - name: Lint HTML
@@ -28,4 +42,34 @@ jobs:
 
       - name: Lint JavaScript
         run: npm run lint:js
-  
+
+      - name: Install PHP MySQL extension and MySQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y php-cli php-mysql default-mysql-client
+          php -m | grep -i mysqli
+
+      - name: Create isolated CI database schema
+        env:
+          MYSQL_PWD: colors_test_password
+        run: mysql -h 127.0.0.1 -P 3306 -u colors_test COP4331 < tests/fixtures/schema.sql
+
+      - name: Create test-only PHP config
+        run: |
+          cat > api/config.php <<'PHP'
+          <?php
+          $dbHost = '127.0.0.1';
+          $dbUser = 'colors_test';
+          $dbPass = 'colors_test_password';
+          $dbName = 'COP4331';
+          PHP
+
+      - name: Start PHP API test server
+        run: |
+          php -S 127.0.0.1:8765 -t . > /tmp/colors-php-server.log 2>&1 &
+          echo $! > /tmp/colors-php-server.pid
+          sleep 2
+          kill -0 "$(cat /tmp/colors-php-server.pid)"
+
+      - name: Run front-end unit and API integration tests
+        run: npm test
