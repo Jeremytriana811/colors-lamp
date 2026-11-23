@@ -2,16 +2,18 @@
   "name": "colors-lamp-lint",
   "version": "1.0.0",
   "private": true,
-  "description": "Development-only lint checks for COLORS (PHP/MySQL application)",
+  "description": "Development-only lint and tests for COLORS PHP/MySQL app",
   "scripts": {
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
     "lint:html": "htmlhint public/index.html public/color.html",
     "lint:css": "stylelint \"public/css/**/*.css\"",
-    "lint:js": "eslint public/js/code.js"
+    "lint:js": "eslint public/js/code.js",
+    "test": "jest --runInBand"
   },
   "devDependencies": {
     "eslint": "^9.0.0",
     "htmlhint": "^1.0.0",
-    "stylelint": "^16.0.0"
+    "stylelint": "^16.0.0",
+    "jest": "^29.7.0"
   }
 }
